@@ -9,6 +9,7 @@ const AddQuestion = () => {
     const [note, setNote] = useState('');
     const [category, setCategory] = useState('dance');
     const [message, setMessage] = useState('');
+    const [uploading, setUploading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -41,6 +42,8 @@ const AddQuestion = () => {
         }
 
         try {
+            setUploading(true);
+
             const payload = {
                 question: question.trim(),
                 options: trimmedOptions,
@@ -58,12 +61,14 @@ const AddQuestion = () => {
             setOptions(['']);
             setAnswerIndex(null);
             setNote('');
+            setUploading(false);
         } catch (err) {
             console.error(err);
             setMessage('❌ Failed to add question.');
             setTimeout(() => {
                 setMessage('');
             }, 5000);
+            setUploading("false");
         }
     };
 
@@ -135,7 +140,9 @@ const AddQuestion = () => {
                     </label>
                 </div>
 
-                <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} type="submit">Submit Question</button>
+                {
+                    uploading ? <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }}>Uploading...</button>
+                       : <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} type="submit">Submit Question</button>}
             </form>
 
             {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
