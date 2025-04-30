@@ -1,0 +1,115 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+const buttonStyle = {
+    background: "rgba(0, 120, 255, 0.2)",
+    border: "none",
+    padding: "10px 1.5rem",
+    cursor: "pointer"
+};
+
+const TestSelector = () => {
+    const [category, setCategory] = useState("dance");
+    const [limit, setLimit] = useState(10);
+    const [questionSets, setQuestionSets] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const handlePlus = () => {
+        if (limit < 50) setLimit(prev => prev + 5);
+    };
+
+    const handleMinus = () => {
+        if (limit > 5) setLimit(prev => prev - 5);
+    };
+
+    const splitIntoChunks = (questions, size) => {
+        const chunks = [];
+        for (let i = 0; i < questions.length; i += size) {
+            chunks.push(questions.slice(i, i + size));
+        }
+        return chunks;
+    };
+
+    const fetchQuestions = async () => {
+        setLoading(true);
+        try {
+            const res = await axios.get(`https://music-quiz-backend.vercel.app/quiz?category=${category}`);
+            const questions = res.data.questions || [];
+            const sets = splitIntoChunks(questions, limit);
+            setQuestionSets(sets);
+            setError(null);
+        } catch (err) {
+            setError("Failed to fetch questions.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchQuestions();
+    }, [category, limit]);
+
+    const handleStartTest = (index) => {
+        // send testSet via navigation state
+        navigate(`/test/start/${index}`, {
+            state: { questions: questionSets[index], category, testIndex: index + 1 }
+        });
+    };
+
+    return (
+        <div style={{ padding: "1rem", maxWidth: "600px", margin: "auto" }}>
+            <h2 style={{ textAlign: "center" }}>Select Number of Questions Per Test</h2>
+
+            {/* Category selection */}
+            <div style={{ marginBottom: "1rem", textAlign: "center" }}>
+                <label style={{ marginRight: "1rem" }}>
+                    <input
+                        type="radio"
+                        value="dance"
+                        checked={category === "dance"}
+                        onChange={(e) => setCategory(e.target.value)}
+                    /> Dance
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        value="music"
+                        checked={category === "music"}
+                        onChange={(e) => setCategory(e.target.value)}
+                    /> Music
+                </label>
+            </div>
+
+            {/* Limit selection */}
+            <div style={{ display: "flex", justifyContent: "center", gap: "1rem", marginBottom: "2rem" }}>
+                <button onClick={handleMinus} style={buttonStyle}>-</button>
+                <span style={{ fontWeight: "bold", fontSize: "1.25rem" }}>{limit}</span>
+                <button onClick={handlePlus} style={buttonStyle}>+</button>
+            </div>
+
+            {/* Test list */}
+            {loading ? (
+                <h2 style={{ color: "#666" }}>Loading questions...</h2>
+            ) : error ? (
+                <h2 style={{ color: 'crimson' }}>{error}</h2>
+            ) : (
+                <div>
+                    <h3>Available Tests:</h3>
+                    {questionSets.map((set, index) => (
+                        <div key={index} style={{ marginBottom: "1rem", padding: "0.5rem", border: "1px solid #ccc" }}>
+                            <p>Test {index + 1} – {set.length} questions</p>
+                            <button onClick={() => handleStartTest(index)} style={buttonStyle}>
+                                Start Test
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default TestSelector;

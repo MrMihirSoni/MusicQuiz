@@ -154,10 +154,7 @@ const Quiz = ({ category }) => {
             )}
 
             {showAnswer && (
-                <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-between" }}>
-                    <button onClick={() => setShowAnswer(false)} style={buttonStyle}>
-                        Retry
-                    </button>
+                <div style={{ marginTop: "20px" }}>
                     <button onClick={handleNext} style={buttonStyle}>
                         {currentQuestionIndex < questions.length - 1 ? "Next Question" : "Finish"}
                     </button>

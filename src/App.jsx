@@ -1,53 +1,53 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import './App.css';
 import Quiz from './Quiz.jsx';
+import TestSelector from './TestSelector.jsx';
 import AddQuestion from './AddQuestion.jsx';
+import TestRunner from './TestRunner.jsx';
 
 function App() {
+  const navigate = useNavigate();
+
   return (
     <div style={{ padding: '1rem', maxWidth: '600px', margin: 'auto' }}>
-      <Router>
-        <Routes>
+      <Routes>
 
-          {/* 🏠 Home Page */}
-          <Route path="/" element={
-            <div style={{ padding: "1rem", display: "flex", flexDirection: "column", gap: "2rem" }}>
-              <div>
-                <h1 style={{ margin: "1rem 0", color: "#666" }}>Welcome to quiz website!!</h1>
-              </div>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-                  <Link to="/quiz/dance">
-                    <button style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
-                      Dance Quiz
-                    </button>
-                  </Link>
-                  <Link to="/quiz/music">
-                    <button style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
-                      Music Quiz
-                    </button>
-                  </Link>
-
-                <Link to="/add">
-                  <button style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
-                    Add Question
-                  </button>
-                </Link>
-              </div>
+        {/* 🏠 Home Page */}
+        <Route path="/" element={
+          <div style={{ padding: "1rem", display: "flex", flexDirection: "column", gap: "2rem" }}>
+            <div>
+              <h1 style={{ margin: "1rem 0", color: "#666" }}>Welcome to quiz website!!</h1>
             </div>
-          } />
 
-          {/* 🎵 Music Quiz */}
-          <Route path="/quiz/music" element={<Quiz category="music" />} />
+            <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+              <button onClick={() => navigate("/quiz/dance")} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
+                Dance Quiz
+              </button>
+              <button onClick={() => navigate("/quiz/music")} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
+                Music Quiz
+              </button>
+              <button onClick={() => navigate("/test")} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>Test Series</button>
+              <button onClick={() => navigate("/add")} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
+                Add Question
+              </button>
+            </div>
+          </div>
+        } />
 
-          {/* 💃 Dance Quiz */}
-          <Route path="/quiz/dance" element={<Quiz category="dance" />} />
+        {/* 🎵 Music Quiz */}
+        <Route path="/quiz/music" element={<Quiz category="music" />} />
 
-          {/* ➕ Add Question */}
-          <Route path="/add" element={<AddQuestion />} />
+        {/* 💃 Dance Quiz */}
+        <Route path="/quiz/dance" element={<Quiz category="dance" />} />
 
-        </Routes>
-      </Router>
+        {/* ➕ Add Question */}
+        <Route path="/add" element={<AddQuestion />} />
+
+        <Route path="/test" element={<TestSelector />} />
+
+        <Route path="/test/start/:index" element={<TestRunner />} />
+
+      </Routes>
     </div>
   );
 }
