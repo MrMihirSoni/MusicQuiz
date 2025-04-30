@@ -51,6 +51,9 @@ const AddQuestion = () => {
 
             await axios.post(`https://music-quiz-backend.vercel.app/quiz/addQuestion`, payload);
             setMessage('✅ Question added!');
+            setTimeout(() => {
+                setMessage('');
+            }, 5000);
             setQuestion('');
             setOptions(['']);
             setAnswerIndex(null);
@@ -58,6 +61,9 @@ const AddQuestion = () => {
         } catch (err) {
             console.error(err);
             setMessage('❌ Failed to add question.');
+            setTimeout(() => {
+                setMessage('');
+            }, 5000);
         }
     };
 
@@ -87,7 +93,7 @@ const AddQuestion = () => {
                             value={opt}
                             onChange={e => handleOptionChange(index, e.target.value)}
                             required
-                            style={{ flex: 1, marginRight: '0.5rem', padding: "0.5rem", width: "100%"}}
+                            style={{ flex: 1, marginRight: '0.5rem', padding: "0.5rem", width: "100%" }}
                         />
                         {options.length > 1 && (
                             <button type="button" onClick={() => removeOption(index)}>❌</button>
