@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AddQuestion = () => {
     const [question, setQuestion] = useState('');
@@ -8,6 +9,8 @@ const AddQuestion = () => {
     const [note, setNote] = useState('');
     const [category, setCategory] = useState('dance');
     const [message, setMessage] = useState('');
+
+    const navigate = useNavigate();
 
     const handleOptionChange = (index, value) => {
         const updated = [...options];
@@ -59,15 +62,15 @@ const AddQuestion = () => {
     };
 
     return (
-        <div style={{ padding: '2rem', maxWidth: '600px', margin: 'auto' }}>
-            <h2>Add New Question</h2>
+        <div style={{ padding: '1rem', maxWidth: '600px', margin: 'auto' }}>
+            <h2 style={{ margin: "1rem 0", color: "#666" }}>Add New Question</h2>
             <form onSubmit={handleSubmit}>
                 <input
                     placeholder="Enter question"
                     value={question}
                     onChange={e => setQuestion(e.target.value)}
                     required
-                    style={{ display: 'block', width: '100%', marginBottom: '1rem' }}
+                    style={{ display: 'block', width: '100%', marginBottom: '1rem', padding: "0.5rem" }}
                 />
 
                 {options.map((opt, index) => (
@@ -84,7 +87,7 @@ const AddQuestion = () => {
                             value={opt}
                             onChange={e => handleOptionChange(index, e.target.value)}
                             required
-                            style={{ flex: 1, marginRight: '0.5rem' }}
+                            style={{ flex: 1, marginRight: '0.5rem', padding: "0.5rem", width: "100%"}}
                         />
                         {options.length > 1 && (
                             <button type="button" onClick={() => removeOption(index)}>❌</button>
@@ -93,18 +96,18 @@ const AddQuestion = () => {
                 ))}
 
                 {options.length < 5 && (
-                    <button type="button" onClick={addOption} style={{ marginBottom: '1rem' }}>➕ Add Option</button>
+                    <button type="button" onClick={addOption} style={{ marginBottom: '1rem', padding: "0.5rem", border: "none", background: "rgba(0, 120, 255, 0.2)" }}>➕ Add Option</button>
                 )}
 
                 <input
                     placeholder="Note (optional)"
                     value={note}
                     onChange={e => setNote(e.target.value)}
-                    style={{ display: 'block', width: '100%', marginBottom: '1rem' }}
+                    style={{ display: 'block', width: '100%', marginBottom: '1rem', padding: "0.5rem" }}
                 />
 
                 <div style={{ marginBottom: '1rem' }}>
-                    <label>
+                    <label style={{ background: category === "music" && "rgba(0, 120, 255, 0.2)", padding: "0.5rem" }}>
                         <input
                             type="radio"
                             value="music"
@@ -114,7 +117,7 @@ const AddQuestion = () => {
                         />
                         Music
                     </label>
-                    <label style={{ marginLeft: '1rem' }}>
+                    <label style={{ background: category === "dance" && "rgba(0, 120, 255, 0.2)", padding: "0.5rem" }}>
                         <input
                             type="radio"
                             value="dance"
@@ -126,10 +129,11 @@ const AddQuestion = () => {
                     </label>
                 </div>
 
-                <button type="submit">Submit Question</button>
+                <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} type="submit">Submit Question</button>
             </form>
 
             {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
+            <div style={{ marginTop: "2rem", display: "flex", justifyContent: "right" }}><button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} onClick={() => navigate("/")}>Go Home</button></div>
         </div>
     );
 };
