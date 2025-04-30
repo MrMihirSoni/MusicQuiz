@@ -10,7 +10,8 @@ const buttonStyle = {
 };
 
 const TestSelector = () => {
-    const [category, setCategory] = useState("dance");
+    const [category, setCategory] = useState("");
+    const [categorySelected, setCategorySelected] = useState(false)
     const [limit, setLimit] = useState(10);
     const [questionSets, setQuestionSets] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -49,6 +50,7 @@ const TestSelector = () => {
     };
 
     useEffect(() => {
+        if (!category) return;
         fetchQuestions();
     }, [category, limit]);
 
@@ -61,53 +63,66 @@ const TestSelector = () => {
 
     return (
         <div style={{ padding: "1rem", maxWidth: "600px", margin: "auto" }}>
-            <h2 style={{ textAlign: "center" }}>Select Number of Questions Per Test</h2>
+            <h2 style={{ color: "#666" }}>Select Number of Questions Per Test</h2>
 
             {/* Category selection */}
-            <div style={{ marginBottom: "1rem", textAlign: "center" }}>
-                <label style={{ marginRight: "1rem" }}>
+            <div style={{ marginBottom: "1rem", display: "flex", gap: "1rem" }}>
+                <label style={{background: category==="dance" && "rgba(0, 120, 255, 0.2)", padding: "10px 1.5rem 10px 0"}}>
                     <input
                         type="radio"
                         value="dance"
                         checked={category === "dance"}
-                        onChange={(e) => setCategory(e.target.value)}
+                        onChange={(e) => {
+                            setCategory(e.target.value);
+                            setCategorySelected(true);
+                        }}
                     /> Dance
                 </label>
-                <label>
+                <label style={{background: category==="music" && "rgba(0, 120, 255, 0.2)", padding: "10px 1.5rem 10px 0"}}>
                     <input
                         type="radio"
                         value="music"
                         checked={category === "music"}
-                        onChange={(e) => setCategory(e.target.value)}
+                        onChange={(e) => {
+                            setCategory(e.target.value);
+                            setCategorySelected(true);
+                        }}
                     /> Music
                 </label>
             </div>
 
             {/* Limit selection */}
-            <div style={{ display: "flex", justifyContent: "center", gap: "1rem", marginBottom: "2rem" }}>
+            <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem" }}>
                 <button onClick={handleMinus} style={buttonStyle}>-</button>
                 <span style={{ fontWeight: "bold", fontSize: "1.25rem" }}>{limit}</span>
                 <button onClick={handlePlus} style={buttonStyle}>+</button>
             </div>
 
             {/* Test list */}
-            {loading ? (
-                <h2 style={{ color: "#666" }}>Loading questions...</h2>
-            ) : error ? (
-                <h2 style={{ color: 'crimson' }}>{error}</h2>
-            ) : (
-                <div>
-                    <h3>Available Tests:</h3>
-                    {questionSets.map((set, index) => (
-                        <div key={index} style={{ marginBottom: "1rem", padding: "0.5rem", border: "1px solid #ccc" }}>
-                            <p>Test {index + 1} – {set.length} questions</p>
-                            <button onClick={() => handleStartTest(index)} style={buttonStyle}>
-                                Start Test
-                            </button>
+
+            {
+                categorySelected && <>
+                    {loading ? (
+                        <h2 style={{ color: "#666" }}>Loading questions...</h2>
+                    ) : error ? (
+                        <h2 style={{ color: 'crimson' }}>{error}</h2>
+                    ) : (
+                        <div>
+                            <h3>Available Tests:</h3>
+                            {questionSets.map((set, index) => (
+                                <div key={index} style={{ marginBottom: "1rem", padding: "0.5rem", border: "1px solid #ccc" }}>
+                                    <p>Test {index + 1} &#40;{set.length} questions&#41;</p>
+                                    <button onClick={() => handleStartTest(index)} style={buttonStyle}>
+                                        Start Test
+                                    </button>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-            )}
+                    )}
+                </>
+            }
+
+
         </div>
     );
 };

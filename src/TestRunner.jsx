@@ -50,18 +50,19 @@ const TestRunner = () => {
 
     return (
         <div style={{ padding: "1rem", maxWidth: "700px", margin: "auto" }}>
-            <h2 style={{ color: "#666" }}>
-                {finished ? "🎉 Test Completed!" : `Q: ${currentIndex + 1}`}
-            </h2>
 
             {finished ? (
                 <div style={{ textAlign: 'center' }}>
-                    <p>You scored <strong>{score}</strong> out of <strong>{questions.length}</strong>.</p>
+                    <h2 style={{ color: "#666" }}>🎉 Test Completed!</h2>
+                    <p style={{ color: "#444", marginTop: "1rem", marginBottom: "2rem" }}>You scored <strong>{score}</strong>/<strong>{questions.length}</strong>.</p>
                     <button onClick={handleBackToMenu} style={buttonStyle}>Back to Tests</button>
                 </div>
             ) : (
                 <>
-                    <h3 style={{ color: "#444" }}>Q: {current.question}</h3>
+                    <div style={{ display: "flex", gap: "1rem" }}>
+                        <h2 style={{ color: "#666" }}>Q{currentIndex + 1}:</h2>
+                        <h2 style={{ color: "#666" }}>{current.question}</h2>
+                    </div>
                     <ul style={{ listStyle: "none", padding: 0 }}>
                         {current.options.map((opt, index) => (
                             <li key={index} style={{ marginBottom: "10px" }}>
