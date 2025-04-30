@@ -110,7 +110,7 @@ const AddQuestion = () => {
                     <button type="button" onClick={addOption} style={{ marginBottom: '1rem', padding: "0.5rem", border: "none", background: "rgba(0, 120, 255, 0.2)" }}>➕ Add Option</button>
                 )}
 
-                <input
+                <textarea
                     placeholder="Note (optional)"
                     value={note}
                     onChange={e => setNote(e.target.value)}
@@ -142,7 +142,7 @@ const AddQuestion = () => {
 
                 {
                     uploading ? <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }}>Uploading...</button>
-                       : <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} type="submit">Submit Question</button>}
+                        : <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} type="submit">Submit Question</button>}
             </form>
 
             {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
