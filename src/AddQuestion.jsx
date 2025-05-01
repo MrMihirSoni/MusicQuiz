@@ -152,7 +152,7 @@ const AddQuestion = () => {
 
                 {
                     uploading ? <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }}>Uploading...</button>
-                        : <> { category ? <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} type="submit">Submit Question</button> : <button style={{ background: "rgba(63, 72, 84, 0.2)", border: "none", padding: "10px 1.5rem", color: "#888" }} >Submit Question</button>} </>}
+                        : <> { category ? <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} type="submit">Submit Question</button> : <button style={{ background: "rgba(63, 72, 84, 0.2)", border: "none", padding: "10px 1.5rem", color: "#888" }} disabled >Submit Question</button>} </>}
             </form>
 
             {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
