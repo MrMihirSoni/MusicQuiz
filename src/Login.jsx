@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useAuth } from './AuthContext';
-import AddQuestion from './addQuestion';
+import AddQuestion from './AddQuestion';
 
 const Login = () => {
   const inputRef = useRef(null);
