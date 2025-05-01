@@ -4,6 +4,7 @@ import Quiz from './Quiz.jsx';
 import TestSelector from './TestSelector.jsx';
 import AddQuestion from './AddQuestion.jsx';
 import TestRunner from './TestRunner.jsx';
+import Login from './Login.jsx';
 
 function App() {
   const navigate = useNavigate();
@@ -40,12 +41,11 @@ function App() {
         {/* 💃 Dance Quiz */}
         <Route path="/quiz/dance" element={<Quiz category="dance" />} />
 
-        {/* ➕ Add Question */}
-        <Route path="/add" element={<AddQuestion />} />
-
         <Route path="/test" element={<TestSelector />} />
 
         <Route path="/test/start/:index" element={<TestRunner />} />
+
+        <Route path="/add" element={<Login/>}/>
 
       </Routes>
     </div>

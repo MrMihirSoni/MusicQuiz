@@ -7,7 +7,7 @@ const AddQuestion = () => {
     const [options, setOptions] = useState(['']);
     const [answerIndex, setAnswerIndex] = useState(null);
     const [note, setNote] = useState('');
-    const [category, setCategory] = useState('dance');
+    const [category, setCategory] = useState('');
     const [message, setMessage] = useState('');
     const [uploading, setUploading] = useState(false);
 
@@ -138,11 +138,21 @@ const AddQuestion = () => {
                         />
                         Dance
                     </label>
+                    <label style={{ background: category === "tabla" && "rgba(0, 120, 255, 0.2)", padding: "0.5rem" }}>
+                        <input
+                            type="radio"
+                            value="tabla"
+                            checked={category === 'tabla'}
+                            onChange={e => setCategory(e.target.value)}
+                            style={{ marginRight: '0.5rem' }}
+                        />
+                        Tabla
+                    </label>
                 </div>
 
                 {
                     uploading ? <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }}>Uploading...</button>
-                        : <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} type="submit">Submit Question</button>}
+                        : <> { category ? <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} type="submit">Submit Question</button> : <button style={{ background: "rgba(63, 72, 84, 0.2)", border: "none", padding: "10px 1.5rem", color: "#888" }} >Submit Question</button>} </>}
             </form>
 
             {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
