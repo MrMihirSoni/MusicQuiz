@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +10,9 @@ const AddQuestion = () => {
     const [category, setCategory] = useState('');
     const [message, setMessage] = useState('');
     const [uploading, setUploading] = useState(false);
+    const [justAddedIndex, setJustAddedIndex] = useState(null); // ✅ for focusing last
 
+    const optionRefs = useRef([]);
     const navigate = useNavigate();
 
     const handleOptionChange = (index, value) => {
@@ -19,7 +21,10 @@ const AddQuestion = () => {
         setOptions(updated);
     };
 
-    const addOption = () => setOptions([...options, '']);
+    const addOption = () => {
+        setOptions(prev => [...prev, '']);
+        setJustAddedIndex(options.length); // next index to focus
+    };
 
     const removeOption = (index) => {
         if (options.length > 1) {
@@ -30,20 +35,22 @@ const AddQuestion = () => {
         }
     };
 
+    useEffect(() => {
+        if (justAddedIndex !== null && optionRefs.current[justAddedIndex]) {
+            optionRefs.current[justAddedIndex].focus();
+            setJustAddedIndex(null);
+        }
+    }, [options]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const trimmedOptions = options.map(opt => opt.trim()).filter(opt => opt !== '');
-        if (trimmedOptions.length < 2) {
-            return setMessage('❌ At least 2 valid options are required.');
-        }
-        if (answerIndex === null || answerIndex >= trimmedOptions.length) {
-            return setMessage('❌ Please select the correct answer.');
-        }
+        if (trimmedOptions.length < 2) return setMessage('❌ At least 2 valid options are required.');
+        if (answerIndex === null || answerIndex >= trimmedOptions.length) return setMessage('❌ Please select the correct answer.');
 
         try {
             setUploading(true);
-
             const payload = {
                 question: question.trim(),
                 options: trimmedOptions,
@@ -51,12 +58,9 @@ const AddQuestion = () => {
                 note: note.trim() || "No note provided.",
                 category
             };
-
             await axios.post(`https://music-quiz-backend.vercel.app/quiz/addQuestion`, payload);
             setMessage('✅ Question added!');
-            setTimeout(() => {
-                setMessage('');
-            }, 5000);
+            setTimeout(() => setMessage(''), 5000);
             setQuestion('');
             setOptions(['']);
             setAnswerIndex(null);
@@ -65,10 +69,8 @@ const AddQuestion = () => {
         } catch (err) {
             console.error(err);
             setMessage('❌ Failed to add question.');
-            setTimeout(() => {
-                setMessage('');
-            }, 5000);
-            setUploading("false");
+            setTimeout(() => setMessage(''), 5000);
+            setUploading(false);
         }
     };
 
@@ -94,6 +96,7 @@ const AddQuestion = () => {
                             style={{ marginRight: '0.5rem' }}
                         />
                         <input
+                            ref={el => optionRefs.current[index] = el} // ✅ store each input ref
                             placeholder={`Option ${index + 1}`}
                             value={opt}
                             onChange={e => handleOptionChange(index, e.target.value)}
@@ -107,7 +110,9 @@ const AddQuestion = () => {
                 ))}
 
                 {options.length < 5 && (
-                    <button type="button" onClick={addOption} style={{ marginBottom: '1rem', padding: "0.5rem", border: "none", background: "rgba(0, 120, 255, 0.2)" }}>➕ Add Option</button>
+                    <button type="button" onClick={addOption} style={{ marginBottom: '1rem', padding: "0.5rem", border: "none", background: "rgba(0, 120, 255, 0.2)" }}>
+                        ➕ Add Option
+                    </button>
                 )}
 
                 <textarea
@@ -117,48 +122,46 @@ const AddQuestion = () => {
                     style={{ display: 'block', width: '100%', marginBottom: '1rem', padding: "0.5rem" }}
                 />
 
+                {/* Category Radio Buttons */}
                 <div style={{ marginBottom: '1rem' }}>
-                    <label style={{ background: category === "music" && "rgba(0, 120, 255, 0.2)", padding: "0.5rem" }}>
-                        <input
-                            type="radio"
-                            value="music"
-                            checked={category === 'music'}
-                            onChange={e => setCategory(e.target.value)}
-                            style={{ marginRight: '0.5rem' }}
-                        />
-                        Music
-                    </label>
-                    <label style={{ background: category === "dance" && "rgba(0, 120, 255, 0.2)", padding: "0.5rem" }}>
-                        <input
-                            type="radio"
-                            value="dance"
-                            checked={category === 'dance'}
-                            onChange={e => setCategory(e.target.value)}
-                            style={{ marginRight: '0.5rem' }}
-                        />
-                        Dance
-                    </label>
-                    <label style={{ background: category === "tabla" && "rgba(0, 120, 255, 0.2)", padding: "0.5rem" }}>
-                        <input
-                            type="radio"
-                            value="tabla"
-                            checked={category === 'tabla'}
-                            onChange={e => setCategory(e.target.value)}
-                            style={{ marginRight: '0.5rem' }}
-                        />
-                        Tabla
-                    </label>
+                    {["music", "dance", "tabla"].map(cat => (
+                        <label key={cat} style={{
+                            background: category === cat ? "rgba(0, 120, 255, 0.2)" : "",
+                            padding: "0.5rem", marginRight: "1rem"
+                        }}>
+                            <input
+                                type="radio"
+                                value={cat}
+                                checked={category === cat}
+                                onChange={e => setCategory(e.target.value)}
+                                style={{ marginRight: '0.5rem' }}
+                            />
+                            {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                        </label>
+                    ))}
                 </div>
 
-                {
-                    uploading ? <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }}>Uploading...</button>
-                        : <> { category ? <button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} type="submit">Submit Question</button> : <button style={{ background: "rgba(63, 72, 84, 0.2)", border: "none", padding: "10px 1.5rem", color: "#888" }} disabled >Submit Question</button>} </>}
+                {uploading ? (
+                    <button disabled style={buttonStyle}>Uploading...</button>
+                ) : category ? (
+                    <button type="submit" style={buttonStyle}>Submit Question</button>
+                ) : (
+                    <button disabled style={{ ...buttonStyle, background: "rgba(63, 72, 84, 0.2)", color: "#888" }}>Submit Question</button>
+                )}
             </form>
 
             {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
-            <div style={{ marginTop: "2rem", display: "flex", justifyContent: "right" }}><button style={{ background: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1.5rem" }} onClick={() => navigate("/")}>Go Home</button></div>
+            <div style={{ marginTop: "2rem", display: "flex", justifyContent: "right" }}>
+                <button onClick={() => navigate("/")} style={buttonStyle}>Go Home</button>
+            </div>
         </div>
     );
+};
+
+const buttonStyle = {
+    background: "rgba(0, 120, 255, 0.2)",
+    border: "none",
+    padding: "10px 1.5rem"
 };
 
 export default AddQuestion;
