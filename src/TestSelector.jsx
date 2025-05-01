@@ -67,22 +67,22 @@ const TestSelector = () => {
 
             {/* Category selection */}
             <div style={{ marginBottom: "1rem", display: "flex", gap: "1rem" }}>
-                <label style={{background: category==="dance" && "rgba(0, 120, 255, 0.2)", padding: "10px 1.5rem 10px 0"}}>
+                <label style={{background: category==="dance,tabla" && "rgba(0, 120, 255, 0.2)", padding: "10px 1.5rem 10px 0"}}>
                     <input
                         type="radio"
-                        value="dance"
-                        checked={category === "dance"}
+                        value="dance,tabla"
+                        checked={category === "dance,tabla"}
                         onChange={(e) => {
                             setCategory(e.target.value);
                             setCategorySelected(true);
                         }}
                     /> Dance
                 </label>
-                <label style={{background: category==="music" && "rgba(0, 120, 255, 0.2)", padding: "10px 1.5rem 10px 0"}}>
+                <label style={{background: category==="music,tabla" && "rgba(0, 120, 255, 0.2)", padding: "10px 1.5rem 10px 0"}}>
                     <input
                         type="radio"
-                        value="music"
-                        checked={category === "music"}
+                        value="music,tabla"
+                        checked={category === "music,tabla"}
                         onChange={(e) => {
                             setCategory(e.target.value);
                             setCategorySelected(true);

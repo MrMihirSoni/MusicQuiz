@@ -36,10 +36,10 @@ function App() {
         } />
 
         {/* 🎵 Music Quiz */}
-        <Route path="/quiz/music" element={<Quiz category="music" />} />
+        <Route path="/quiz/music" element={<Quiz category="music,tabla" />} />
 
         {/* 💃 Dance Quiz */}
-        <Route path="/quiz/dance" element={<Quiz category="dance" />} />
+        <Route path="/quiz/dance" element={<Quiz category="dance,tabla" />} />
 
         <Route path="/test" element={<TestSelector />} />
 
