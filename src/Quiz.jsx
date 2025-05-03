@@ -154,21 +154,22 @@ const Quiz = ({ category }) => {
             )}
 
             {showAnswer && (
-                <div style={{ marginTop: "20px" }}>
-                    <button onClick={handleNext} style={buttonStyle}>
-                        {currentQuestionIndex < questions.length - 1 ? "Next Question" : "Finish"}
-                    </button>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div style={{ display: "flex", gap: "2rem", flexDirection: "column" }}>
+                        {attempted > 0 && <button onClick={handleEndQuiz} style={buttonStyle}>
+                            End Quiz
+                        </button>}
+                        <button onClick={() => navigate("/")} style={buttonStyle}>
+                            Go Home
+                        </button>
+                    </div>
+                    <div>
+                        <button onClick={handleNext} style={buttonStyle}>
+                            {currentQuestionIndex < questions.length - 1 ? "Next Question" : "Finish"}
+                        </button>
+                    </div>
                 </div>
             )}
-
-            <div style={{ marginTop: "2rem", display: "flex", justifyContent: "space-between" }}>
-                <button onClick={() => navigate("/")} style={buttonStyle}>
-                    Go Home
-                </button>
-                {attempted > 0 && <button onClick={handleEndQuiz} style={buttonStyle}>
-                    End Quiz
-                </button>}
-            </div>
         </div>
     );
 };

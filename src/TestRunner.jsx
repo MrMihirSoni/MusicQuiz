@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const buttonStyle = {
@@ -8,22 +8,38 @@ const buttonStyle = {
     cursor: "pointer"
 };
 
+const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+};
+
 const TestRunner = () => {
     const navigate = useNavigate();
     const { state } = useLocation();
     const { questions, category, testIndex } = state || {};
 
+    const [shuffledQuestions, setShuffledQuestions] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState(null);
     const [showAnswer, setShowAnswer] = useState(false);
     const [score, setScore] = useState(0);
     const [finished, setFinished] = useState(false);
 
-    if (!questions || !questions.length) {
+    useEffect(() => {
+        if (questions?.length) {
+            setShuffledQuestions(shuffleArray(questions));
+        }
+    }, [questions]);
+
+    if (!shuffledQuestions.length) {
         return <h2 style={{ color: 'crimson' }}>No questions available!</h2>;
     }
 
-    const current = questions[currentIndex];
+    const current = shuffledQuestions[currentIndex];
     const isCorrect = selectedOption === current.answer;
 
     const handleOptionClick = (index) => {
@@ -35,7 +51,7 @@ const TestRunner = () => {
     };
 
     const handleNext = () => {
-        if (currentIndex < questions.length - 1) {
+        if (currentIndex < shuffledQuestions.length - 1) {
             setCurrentIndex(prev => prev + 1);
             setSelectedOption(null);
             setShowAnswer(false);
@@ -50,11 +66,10 @@ const TestRunner = () => {
 
     return (
         <div style={{ padding: "1rem", maxWidth: "700px", margin: "auto" }}>
-
             {finished ? (
                 <div style={{ textAlign: 'center' }}>
                     <h2 style={{ color: "#666" }}>🎉 Test Completed!</h2>
-                    <p style={{ color: "#444", marginTop: "1rem", marginBottom: "2rem" }}>You scored <strong>{score}</strong>/<strong>{questions.length}</strong>.</p>
+                    <p style={{ color: "#444", marginTop: "1rem", marginBottom: "2rem" }}>You scored <strong>{score}</strong>/<strong>{shuffledQuestions.length}</strong>.</p>
                     <button onClick={handleBackToMenu} style={buttonStyle}>Back to Tests</button>
                 </div>
             ) : (
@@ -102,7 +117,7 @@ const TestRunner = () => {
                             )}
                             <div style={{ textAlign: 'right', marginTop: "1rem" }}>
                                 <button onClick={handleNext} style={buttonStyle}>
-                                    {currentIndex < questions.length - 1 ? "Next" : "Finish"}
+                                    {currentIndex < shuffledQuestions.length - 1 ? "Next" : "Finish"}
                                 </button>
                             </div>
                         </div>
