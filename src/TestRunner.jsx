@@ -61,7 +61,7 @@ const TestRunner = () => {
     };
 
     const handleBackToMenu = () => {
-        navigate('/test');
+        navigate('/test', {replace: true});
     };
 
     return (

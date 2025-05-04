@@ -21,7 +21,7 @@ function App() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-              <button onClick={() => navigate("/quiz/dance")} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
+              <button onClick={() => navigate("/quiz/dance", {replace: true})} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
                 Dance Quiz
               </button>
               <button onClick={() => navigate("/quiz/music")} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>

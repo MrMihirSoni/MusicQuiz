@@ -101,7 +101,7 @@ const Quiz = ({ category }) => {
                     <button onClick={() => window.location.reload()} style={buttonStyle}>
                         Restart Quiz
                     </button>
-                    <button onClick={() => navigate("/")} style={{ ...buttonStyle, marginLeft: "1rem" }}>
+                    <button onClick={() => navigate("/", {replace: true})} style={{ ...buttonStyle, marginLeft: "1rem" }}>
                         Go Home
                     </button>
                 </div>
@@ -159,7 +159,7 @@ const Quiz = ({ category }) => {
                         {attempted > 0 && <button onClick={handleEndQuiz} style={buttonStyle}>
                             End Quiz
                         </button>}
-                        <button onClick={() => navigate("/")} style={buttonStyle}>
+                        <button onClick={() => navigate("/", {replace: true})} style={buttonStyle}>
                             Go Home
                         </button>
                     </div>

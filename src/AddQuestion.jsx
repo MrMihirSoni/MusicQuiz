@@ -152,7 +152,7 @@ const AddQuestion = () => {
 
             {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
             <div style={{ marginTop: "2rem", display: "flex", justifyContent: "right" }}>
-                <button onClick={() => navigate("/")} style={buttonStyle}>Go Home</button>
+                <button onClick={() => navigate("/", {replace: true})} style={buttonStyle}>Go Home</button>
             </div>
         </div>
     );

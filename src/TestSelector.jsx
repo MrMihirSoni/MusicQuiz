@@ -57,7 +57,8 @@ const TestSelector = () => {
     const handleStartTest = (index) => {
         // send testSet via navigation state
         navigate(`/test/start/${index}`, {
-            state: { questions: questionSets[index], category, testIndex: index + 1 }
+            state: { questions: questionSets[index], category, testIndex: index + 1 },
+            replace: true
         });
     };
 
@@ -67,7 +68,7 @@ const TestSelector = () => {
 
             {/* Category selection */}
             <div style={{ marginBottom: "1rem", display: "flex", gap: "1rem" }}>
-                <label style={{background: category==="dance,tabla" && "rgba(0, 120, 255, 0.2)", padding: "10px 1.5rem 10px 0"}}>
+                <label style={{ background: category === "dance,tabla" && "rgba(0, 120, 255, 0.2)", padding: "10px 1.5rem 10px 0" }}>
                     <input
                         type="radio"
                         value="dance,tabla"
@@ -78,7 +79,7 @@ const TestSelector = () => {
                         }}
                     /> Dance
                 </label>
-                <label style={{background: category==="music,tabla" && "rgba(0, 120, 255, 0.2)", padding: "10px 1.5rem 10px 0"}}>
+                <label style={{ background: category === "music,tabla" && "rgba(0, 120, 255, 0.2)", padding: "10px 1.5rem 10px 0" }}>
                     <input
                         type="radio"
                         value="music,tabla"
