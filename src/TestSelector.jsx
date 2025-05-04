@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTestContext } from './TestContext';
 import axios from 'axios';
 
 const buttonStyle = {
@@ -10,9 +11,7 @@ const buttonStyle = {
 };
 
 const TestSelector = () => {
-    const [category, setCategory] = useState("");
-    const [categorySelected, setCategorySelected] = useState(false)
-    const [limit, setLimit] = useState(10);
+    const { category, setCategory, limit, setLimit, categorySelected, setCategorySelected } = useTestContext();
     const [questionSets, setQuestionSets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -51,11 +50,14 @@ const TestSelector = () => {
 
     useEffect(() => {
         if (!category) return;
+
+        // Clear previous question sets before fetching new ones
+        setQuestionSets([]);
+
         fetchQuestions();
     }, [category, limit]);
 
     const handleStartTest = (index) => {
-        // send testSet via navigation state
         navigate(`/test/start/${index}`, {
             state: { questions: questionSets[index], category, testIndex: index + 1 },
             replace: true
@@ -63,7 +65,7 @@ const TestSelector = () => {
     };
 
     return (
-        <div style={{ padding: "1rem", maxWidth: "600px", margin: "auto" }}>
+        <div style={{ padding: "1rem", maxWidth: "600px", margin: "auto" }} key={`${category}-${limit}`}>
             <h2 style={{ color: "#666" }}>Select Number of Questions Per Test</h2>
 
             {/* Category selection */}
@@ -100,9 +102,8 @@ const TestSelector = () => {
             </div>
 
             {/* Test list */}
-
-            {
-                categorySelected && <>
+            {categorySelected && (
+                <>
                     {loading ? (
                         <h2 style={{ color: "#666" }}>Loading questions...</h2>
                     ) : error ? (
@@ -121,9 +122,9 @@ const TestSelector = () => {
                         </div>
                     )}
                 </>
-            }
+            )}
 
-
+            <button onClick={() => navigate("/", { replace: true })} style={buttonStyle}>Go Home</button>
         </div>
     );
 };

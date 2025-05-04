@@ -24,11 +24,11 @@ function App() {
               <button onClick={() => navigate("/quiz/dance", {replace: true})} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
                 Dance Quiz
               </button>
-              <button onClick={() => navigate("/quiz/music")} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
+              <button onClick={() => navigate("/quiz/music", {replace: true})} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
                 Music Quiz
               </button>
-              <button onClick={() => navigate("/test")} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>Test Series</button>
-              <button onClick={() => navigate("/add")} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
+              <button onClick={() => navigate("/test", {replace: true})} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>Test Series</button>
+              <button onClick={() => navigate("/add", {replace: true})} style={{ backgroundColor: "rgba(0, 120, 255, 0.2)", border: "none", padding: "10px 1rem" }}>
                 Add Question
               </button>
             </div>
