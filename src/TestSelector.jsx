@@ -60,7 +60,7 @@ const TestSelector = () => {
     const handleStartTest = (index) => {
         navigate(`/test/start/${index}`, {
             state: { questions: questionSets[index], category, testIndex: index + 1 },
-            replace: true
+            // replace: true
         });
     };
 
