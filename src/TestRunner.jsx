@@ -122,6 +122,8 @@ const TestRunner = () => {
                             </div>
                         </div>
                     )}
+
+                    <button onClick={()=> navigate("/updateQuestion", { state: { questionData: current }})} style={{...buttonStyle, marginTop: "5rem"}}>Update Question</button>
                 </>
             )}
         </div>

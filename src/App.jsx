@@ -5,6 +5,7 @@ import TestSelector from './TestSelector.jsx';
 import AddQuestion from './AddQuestion.jsx';
 import TestRunner from './TestRunner.jsx';
 import Login from './Login.jsx';
+import UpdateQuestion from './UpdateQuestion.jsx';
 
 function App() {
   const navigate = useNavigate();
@@ -45,7 +46,9 @@ function App() {
 
         <Route path="/test/start/:index" element={<TestRunner />} />
 
-        <Route path="/add" element={<Login/>}/>
+        <Route path="/add" element={<Login />} />
+
+        <Route path="/updateQuestion" element={<UpdateQuestion />} />
 
       </Routes>
     </div>
