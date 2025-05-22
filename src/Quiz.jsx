@@ -78,6 +78,7 @@ const Quiz = ({ category }) => {
         setQuizComplete(true);
     };
 
+
     const current = questions[currentQuestionIndex];
     const isCorrect = selectedOption === current?.answer;
 
@@ -172,7 +173,7 @@ const Quiz = ({ category }) => {
             )}
 
             <button
-                onClick={() => navigate("/updateQuestion", { state: { questionData: current } })}
+                onClick={() => navigate("/update", { state: { questionData: current } })}
                 style={{...buttonStyle, marginTop: "5rem"}}
             >
                 Update Question

@@ -5,6 +5,7 @@ import TestSelector from './TestSelector.jsx';
 import AddQuestion from './AddQuestion.jsx';
 import TestRunner from './TestRunner.jsx';
 import Login from './Login.jsx';
+import Login2 from './Login2.jsx';
 import UpdateQuestion from './UpdateQuestion.jsx';
 
 function App() {
@@ -48,7 +49,8 @@ function App() {
 
         <Route path="/add" element={<Login />} />
 
-        <Route path="/updateQuestion" element={<UpdateQuestion />} />
+        <Route path="/update" element={<Login2 />} />
+
 
       </Routes>
     </div>

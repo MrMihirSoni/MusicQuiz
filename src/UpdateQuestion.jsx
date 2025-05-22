@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { replace, useLocation, useNavigate } from 'react-router-dom';
+import { replace, useAsyncError, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const UpdateQuestion = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const questionData = location.state?.questionData;
-
     const [question, setQuestion] = useState('');
     const [options, setOptions] = useState([]);
     const [answerIndex, setAnswerIndex] = useState(null);
@@ -14,7 +13,10 @@ const UpdateQuestion = () => {
     const [category, setCategory] = useState('');
     const [message, setMessage] = useState('');
     const [updating, setUpdating] = useState(false);
+    const [input, setInput] = useState('');
+    const [error, setError] = useState('');
     const optionRefs = useRef([]);
+    const inputRef = useRef(null);
 
     useEffect(() => {
         if (questionData) {
@@ -75,81 +77,85 @@ const UpdateQuestion = () => {
         }
     };
 
+
     return (
-        <div style={{ padding: '1rem', maxWidth: '600px', margin: 'auto' }}>
-            <h2 style={{ margin: "1rem 0", color: "#666" }}>Update Question</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    value={question}
-                    onChange={e => setQuestion(e.target.value)}
-                    required
-                    placeholder="Enter question"
-                    style={{ width: "100%", marginBottom: '1rem', padding: "0.5rem" }}
-                />
-
-                {options.map((opt, index) => (
-                    <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
+        <>
+                <div style={{ padding: '1rem', maxWidth: '600px', margin: 'auto' }}>
+                    <h2 style={{ margin: "1rem 0", color: "#666" }}>Update Question</h2>
+                    <form onSubmit={handleSubmit}>
                         <input
-                            type="radio"
-                            name="correctAnswer"
-                            checked={answerIndex === index}
-                            onChange={() => setAnswerIndex(index)}
-                            style={{ marginRight: '0.5rem' }}
-                        />
-                        <input
-                            ref={el => optionRefs.current[index] = el}
-                            placeholder={`Option ${index + 1}`}
-                            value={opt}
-                            onChange={e => handleOptionChange(index, e.target.value)}
+                            value={question}
+                            onChange={e => setQuestion(e.target.value)}
                             required
-                            style={{ flex: 1, marginRight: '0.5rem', padding: "0.5rem" }}
+                            placeholder="Enter question"
+                            style={{ width: "100%", marginBottom: '1rem', padding: "0.5rem" }}
                         />
-                        {options.length > 1 && (
-                            <button type="button" onClick={() => removeOption(index)}>❌</button>
+
+                        {options.map((opt, index) => (
+                            <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                <input
+                                    type="radio"
+                                    name="correctAnswer"
+                                    checked={answerIndex === index}
+                                    onChange={() => setAnswerIndex(index)}
+                                    style={{ marginRight: '0.5rem' }}
+                                />
+                                <input
+                                    ref={el => optionRefs.current[index] = el}
+                                    placeholder={`Option ${index + 1}`}
+                                    value={opt}
+                                    onChange={e => handleOptionChange(index, e.target.value)}
+                                    required
+                                    style={{ flex: 1, marginRight: '0.5rem', padding: "0.5rem" }}
+                                />
+                                {options.length > 1 && (
+                                    <button type="button" onClick={() => removeOption(index)}>❌</button>
+                                )}
+                            </div>
+                        ))}
+
+                        {options.length < 5 && (
+                            <button type="button" onClick={addOption} style={{ marginBottom: '1rem', padding: "0.5rem", border: "none", background: "rgba(0, 120, 255, 0.2)" }}>
+                                ➕ Add Option
+                            </button>
                         )}
-                    </div>
-                ))}
 
-                {options.length < 5 && (
-                    <button type="button" onClick={addOption} style={{ marginBottom: '1rem', padding: "0.5rem", border: "none", background: "rgba(0, 120, 255, 0.2)" }}>
-                        ➕ Add Option
-                    </button>
-                )}
+                        <textarea
+                            value={note}
+                            onChange={e => setNote(e.target.value)}
+                            placeholder="Note (optional)"
+                            style={{ display: 'block', width: '100%', marginBottom: '1rem', padding: "0.5rem" }}
+                        />
 
-                <textarea
-                    value={note}
-                    onChange={e => setNote(e.target.value)}
-                    placeholder="Note (optional)"
-                    style={{ display: 'block', width: '100%', marginBottom: '1rem', padding: "0.5rem" }}
-                />
+                        <div style={{ marginBottom: '1rem' }}>
+                            {["music", "dance", "tabla"].map(cat => (
+                                <label key={cat} style={{
+                                    background: category === cat ? "rgba(0, 120, 255, 0.2)" : "",
+                                    padding: "0.5rem", marginRight: "1rem"
+                                }}>
+                                    <input
+                                        type="radio"
+                                        value={cat}
+                                        checked={category === cat}
+                                        onChange={e => setCategory(e.target.value)}
+                                        style={{ marginRight: '0.5rem' }}
+                                    />
+                                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                                </label>
+                            ))}
+                        </div>
 
-                <div style={{ marginBottom: '1rem' }}>
-                    {["music", "dance", "tabla"].map(cat => (
-                        <label key={cat} style={{
-                            background: category === cat ? "rgba(0, 120, 255, 0.2)" : "",
-                            padding: "0.5rem", marginRight: "1rem"
-                        }}>
-                            <input
-                                type="radio"
-                                value={cat}
-                                checked={category === cat}
-                                onChange={e => setCategory(e.target.value)}
-                                style={{ marginRight: '0.5rem' }}
-                            />
-                            {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                        </label>
-                    ))}
+                        <button type="submit" style={buttonStyle} disabled={updating}>
+                            {updating ? 'Updating...' : 'Update Question'}
+                        </button>
+                    </form>
+
+                    {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
+
+                    <button onClick={() => navigate("/", { replace: true })} style={{ ...buttonStyle, marginTop: "1rem" }} >Go Home</button>
                 </div>
-
-                <button type="submit" style={buttonStyle} disabled={updating}>
-                    {updating ? 'Updating...' : 'Update Question'}
-                </button>
-            </form>
-
-            {message && <p style={{ marginTop: '1rem' }}>{message}</p>}
-
-            <button onClick={() => navigate("/", { replace: true })} style={{...buttonStyle, marginTop: "1rem"}} >Go Home</button>
-        </div>
+                
+        </>
     );
 };
 

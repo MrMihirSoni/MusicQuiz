@@ -123,7 +123,7 @@ const TestRunner = () => {
                         </div>
                     )}
 
-                    <button onClick={()=> navigate("/updateQuestion", { state: { questionData: current }})} style={{...buttonStyle, marginTop: "5rem"}}>Update Question</button>
+                    <button onClick={()=> navigate("/update", { state: { questionData: current }})} style={{...buttonStyle, marginTop: "5rem"}}>Update Question</button>
                 </>
             )}
         </div>
