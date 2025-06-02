@@ -61,7 +61,7 @@ const TestRunner = () => {
     };
 
     const handleBackToMenu = () => {
-        navigate('/test', {replace: true});
+        navigate('/test', { replace: true });
     };
 
     return (
@@ -123,7 +123,7 @@ const TestRunner = () => {
                         </div>
                     )}
 
-                    <button onClick={()=> navigate("/update", { state: { questionData: current }})} style={{...buttonStyle, marginTop: "5rem"}}>Update Question</button>
+                    <button onClick={() => navigate("/update", { state: { questionData: current } })} style={{ ...buttonStyle, marginTop: "5rem" }}>Edit Question</button>
                 </>
             )}
         </div>

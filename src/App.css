@@ -1,7 +1,7 @@
-.test{
+.test {
   color: rgba(0, 120, 255, 0.2);
 }
 
-.input:focus{
+.input:focus {
   outline: none;
 }
